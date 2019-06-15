@@ -14,6 +14,10 @@ __arwp_user_append: yes
 #-------------------------------------------------------------------------------
 # Wp-cli.
 #-------------------------------------------------------------------------------
+# Wp-ci download url.
+__arwp_wpcli_download_url: >-
+  https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
 # Wp-cli build repo url.
 __arwp_wpcli_build_repo_url: https://github.com/wp-cli/builds.git
 

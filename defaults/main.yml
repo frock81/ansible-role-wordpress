@@ -14,6 +14,14 @@ arwp_group_name: wordpress
 # OS group for the Wordpress files
 arwp_user_name: wordpress
 
-# Wp-cli version to be installed @see https://github.com/wp-cli/wp-cli/tags.
-# Do remove the "v" character in front of version tag
-arwp_wpcli_version: 2.2.0
+# Wp-cli version to be installed.
+#
+# If empty no version check will be made. If any version is already installed
+# nothing will be done. If its not installed, the latest version will be
+# donwloaded and installed.
+#
+# To install a specific version, see https://github.com/wp-cli/wp-cli/tags for
+# options available. Do remove the "v" character in front of the version tag.
+# Ex:
+#arwp_wpcli_version: 2.2.0
+arwp_wpcli_version: ""

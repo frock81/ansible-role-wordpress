@@ -1,0 +1,77 @@
+---
+#-------------------------------------------------------------------------------
+# Wp-cli
+#-------------------------------------------------------------------------------
+- name: set fact arwp_wpcli_do_install as false
+  set_fact:
+    arwp_wpcli_do_install: false
+
+- name: check wp-cli version in the system
+  shell: >-
+    wp --allow-root --version | cut -d' ' -f2
+  register: arwp_result_wpcli_version
+  ignore_errors: yes
+  changed_when: false
+
+- debug: var=arwp_wpcli_do_install
+  tags: [never, debug]
+
+- name: set fact arwp_wpcli_do_install as true
+  set_fact:
+    arwp_wpcli_do_install: true
+  when: >-
+    arwp_result_wpcli_version .stdout == ''
+    or arwp_result_wpcli_version.stdout is version(arwp_wpcli_version, '<>')
+
+- block:
+    - name: clone wp-cli build repository
+      git:
+        repo: "{{ __arwp_wpcli_build_repo_url }}"
+        dest: "{{ __arwp_wpcli_build_repo_dest }}"
+
+    - name: get version {{ arwp_wpcli_version }} commit
+      shell: >-
+        git log | grep -B4 "Update stable to v" 
+        | grep -B4 v{{ arwp_wpcli_version }} | grep commit | cut -d' '  -f2
+      args:
+        chdir: "{{ __arwp_wpcli_build_repo_dest }}"
+      register: arwp_result_commit
+
+    - debug: var=arwp_result_commit
+      tags: [never, debug]
+
+    - name: checkout commit {{ arwp_result_commit }}
+      command: git checkout {{ arwp_result_commit.stdout }}
+      args:
+        chdir: "{{ __arwp_wpcli_build_repo_dest }}"
+
+    - name: set permissions for wp-cli phar
+      file:
+        path: "{{ __arwp_wpcli_phar_path }}"
+        mode: "{{ __arwp_wpcli_phar_filemode }}"
+
+    - name: test wp-cli installation
+      become: yes
+      become_user: "{{ arwp_user_name }}"
+      command: "{{ __arwp_wpcli_phar_path }} --info"
+      register: arwp_result_wpcli_info
+
+    - debug: var=arwp_result_wpcli_info
+      tags: [never, debug]
+
+    - name: assert correct execution of wp-cli
+      assert:
+        that:
+          - arwp_result_wpcli_info.rc == 0
+        success_msg: wp --info correctly executed
+
+    - name: move phar to system path location
+      command: >-
+        mv {{ __arwp_wpcli_phar_path }}
+        {{ __arwp_wpcli_phar_final_path }}/{{ __arwp_wpcli_phar_final_filename }}
+
+    - name: remove build directory
+      file:
+        path: "{{ __arwp_wpcli_build_repo_dest }}"
+        state: absent
+  when: arwp_wpcli_do_install == true

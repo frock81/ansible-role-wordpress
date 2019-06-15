@@ -4,3 +4,8 @@
 
 - name: import wp-cli tasks
   import_tasks: wp_cli.yml
+  when: arwp_wpcli_version == ""
+
+- name: import wp-cli versioned tasks
+  import_tasks: wp_cli_versioned.yml
+  when: arwp_wpcli_version is match("^[0-9]\.[0-9]\.[0-9]$")
