@@ -1,0 +1,33 @@
+---
+#-------------------------------------------------------------------------------
+# User info.
+#-------------------------------------------------------------------------------
+# Geckos.
+__arwp_user_comment: Wordpress user
+
+# User shell. 
+__arwp_user_shell: /bin/bash
+
+# Append group to user groups.
+__arwp_user_append: yes
+
+#-------------------------------------------------------------------------------
+# Wp-cli.
+#-------------------------------------------------------------------------------
+# Wp-cli build repo url.
+__arwp_wpcli_build_repo_url: https://github.com/wp-cli/builds.git
+
+# Destination of build repo clone.
+__arwp_wpcli_build_repo_dest: /tmp/wp-cli
+
+# Full path to wp-cli.phar
+__arwp_wpcli_phar_path: "{{ __arwp_wpcli_build_repo_dest }}/phar/wp-cli.phar"
+
+# Mode for the wp-cli.phar.
+__arwp_wpcli_phar_filemode: '0755'
+
+# Final path for wp-cli (conveniently chosen in the system PATH)
+__arwp_wpcli_phar_final_path: /usr/local/bin
+
+# Final file name for the wp-cli.phar executable.
+__arwp_wpcli_phar_final_filename: wp

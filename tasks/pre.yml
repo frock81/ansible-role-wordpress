@@ -1,0 +1,21 @@
+---
+#-------------------------------------------------------------------------------
+# Pre-tasks
+#-------------------------------------------------------------------------------
+# For eventual previous apache/nginx/mysql installation
+- name: flush handlers
+  meta: flush_handlers
+
+- name: create group for wordpress
+  group:
+    name: "{{ arwp_group_name }}"
+
+- name: create user for wordpress
+  user:
+    name: "{{ arwp_user_name }}"
+    comment: "{{ __arwp_user_comment }}"
+    shell: "{{ __arwp_user_shell }}"
+
+- name: install git
+  package:
+    name: git

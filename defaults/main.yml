@@ -1,1 +1,19 @@
 ---
+#===============================================================================
+# Common vars
+#===============================================================================
+# Parent folder where Wordpress will be installed
+arwp_install_path: /opt
+
+# Name of the Wordpress installation folder
+arwp_install_folder_name: wordpress
+
+# OS user for the wordpress files
+arwp_group_name: wordpress
+
+# OS group for the Wordpress files
+arwp_user_name: wordpress
+
+# Wp-cli version to be installed @see https://github.com/wp-cli/wp-cli/tags.
+# Do remove the "v" character in front of version tag
+arwp_wpcli_version: 2.2.0

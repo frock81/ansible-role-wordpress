@@ -1,1 +1,6 @@
 ---
+- name: import pre tasks
+  import_tasks: pre.yml
+
+- name: import wp-cli tasks
+  import_tasks: wp_cli.yml
