@@ -1,0 +1,56 @@
+---
+- name: set fact wordpress path
+  set_fact:
+    arwp_fact_wordpress_path: >-
+      {{ arwp_install_path }}/{{ arwp_install_folder_name }}
+
+- name: check install directory existence
+  file:
+    path: "{{ arwp_fact_wordpress_path }}"
+    state: directory
+    owner: "{{ arwp_user_name }}"
+    group: "{{ arwp_group_name }}"
+    mode: "{{ arwp_install_folder_mode }}"
+
+- name: set fact wordpress installed to false
+  set_fact:
+    arwp_fact_wordpress_installed: false
+
+- name: check if wordpress is installed
+  command: wp --allow-root core is-installed
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  register: arwp_result_is_installed
+  ignore_errors: yes
+  changed_when: false
+
+- debug: var=arwp_result_is_installed
+  tags: [never, debug]
+
+# I could use directly rc == 0 but this way with set_fact is more readable.
+- name: set fact wordpress installed to true
+  set_fact:
+    arwp_fact_wordpress_installed: true
+  when: arwp_result_is_installed.rc == 0
+
+- block:
+    - name: download wordpress
+      become: yes
+      become_user: "{{ arwp_user_name }}"
+      command: >-
+        wp core download --path="{{ arwp_fact_wordpress_path }}" {{ '--locale="'
+        + arwp_wordpress_locale + '"' if arwp_wordpress_locale else '' }} {{
+        '--version="' + arwp_wordpress_version + '"' if arwp_wordpress_version
+        is regex('^[0-9]\.[0-9]\.?[0-9]?$') else '' }}
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+
+    # - name: install wordpress
+  when: arwp_fact_wordpress_installed == false
+
+# - name: get wordpress installed version
+#   command: wp --allow-root core version
+#   args:
+#     chdir: "{{ arwp_fact_wordpress_path }}"
+#   register: arwp_result_wordpress_version
+#   when: arwp_fact_wordpress_installed == true and arwp_wordpress_version != ""

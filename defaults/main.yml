@@ -2,16 +2,19 @@
 #===============================================================================
 # Common vars
 #===============================================================================
-# Parent folder where Wordpress will be installed
+# Parent folder where Wordpress will be installed.
 arwp_install_path: /opt
 
-# Name of the Wordpress installation folder
+# Name of the Wordpress installation folder.
 arwp_install_folder_name: wordpress
 
-# OS user for the wordpress files
+# Mode for the installation folder.
+arwp_install_folder_mode: '0750'
+
+# OS user for the wordpress files.
 arwp_group_name: wordpress
 
-# OS group for the Wordpress files
+# OS group for the Wordpress files.
 arwp_user_name: wordpress
 
 # Wp-cli version to be installed.
@@ -22,6 +25,27 @@ arwp_user_name: wordpress
 #
 # To install a specific version, see https://github.com/wp-cli/wp-cli/tags for
 # options available. Do remove the "v" character in front of the version tag.
+#
+# When there is just one dot (ex: 2.0) use quotes so it won't be interpreted
+# as a float.
+#
 # Ex:
 #arwp_wpcli_version: 2.2.0
 arwp_wpcli_version: ""
+
+# Wordpress version to be installed.
+#
+# If no version is specified and if wordpress is not installed, install the
+# latest version. If no version is specified and there is a version installed,
+# do nothing.
+#
+# If a version is specified and there is no version installed, install the
+# version. If a version is specified and it differs from an installed version,
+# rename the installed folder, install the new version, sync wp-content.
+#
+# When there is just one dot (ex: 5.0) use quotes so it won't be interpreted
+# as a float.
+arwp_wordpress_version: ""
+
+# Wordpress locale to be downloaded.
+arwp_wordpress_locale: ""
