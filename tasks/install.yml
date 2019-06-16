@@ -28,9 +28,6 @@
   ignore_errors: yes
   changed_when: false
 
-- debug: var=arwp_result_checksums
-  tags: [never, debug]
-
 - name: download wordpress
   become: yes
   become_user: "{{ arwp_user_name }}"
@@ -38,19 +35,19 @@
     wp core download --path="{{ arwp_fact_wordpress_path }}" {{ '--locale="'
     + arwp_wordpress_locale + '"' if arwp_wordpress_locale else '' }} {{
     '--version="' + arwp_wordpress_version + '"' if arwp_wordpress_version
-    is regex('^[0-9]\.[0-9]\.?[0-9]?$') else '' }}
+    is regex('^[0-9]\.[0-9]\.?[0-9]?$') else '' }} --force
   args:
     chdir: "{{ arwp_fact_wordpress_path }}"
+    creates: "{{ arwp_blog_download_creates }}"
   when: arwp_result_checksums.rc != 0
 
 - name: check if wordpress is installed
   command: wp --allow-root core is-installed
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
   register: arwp_result_is_installed
   ignore_errors: yes
   changed_when: false
-
-- debug: var=arwp_result_is_installed
-  tags: [never, debug]
 
 - name: install wordpress
   become: yes

@@ -92,25 +92,25 @@ arwp_wpconfig_debug: false
 #-------------------------------------------------------------------------------
 # Updates.
 #-------------------------------------------------------------------------------
-# Disable WordPress Auto Updates
+# Disable WordPress Auto Updates.
 arwp_wpconfig_automatic_updater_disabled: false
 
-# Disable WordPress Core Updates: true, false, minor
+# Disable WordPress Core Updates: true, false, minor.
 arwp_wpconfig_auto_update_core: true
 
 #-------------------------------------------------------------------------------
 # Theme and plugins related.
 #-------------------------------------------------------------------------------
-# Disable the Plugin and Theme Editor
+# Disable the Plugin and Theme Editor.
 arwp_wpconfig_disallow_file_edit: false
 
-# Disable Plugin and Theme Update and Installation
+# Disable Plugin and Theme Update and Installation.
 arwp_wpconfig_disallow_file_mods: false
 
-# Require SSL for Admin and Logins
+# Require SSL for Admin and Logins.
 arwp_wpconfig_force_ssl_admin: false
 
-# Forces the filesystem method
+# Forces the filesystem method.
 arwp_wpconfig_fs_method: ftpsockets
 
 #-------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ arwp_wpconfig_secure_auth_salt: '=Ga5&#|CXg6&^ta%jghq89] _(5fJH$>W3|LU2<l1niMd@W
 arwp_wpconfig_logged_in_salt: ',U+GYA2(*cDZGaE;I<[HT-uB+9GsqOSCu[+NHx3 GZ6SuIC?<|I-d?pKG>0o&yMO'
 arwp_wpconfig_nonce_salt: '^5M~jK,lte.TK&)W+Dn(SgX>S9<fm5a(5Y|YQ$?FTy8Ia]*SjT]K{lJO@{_%*uLx'
 
-# Util for Vagrant development
+# Util for Vagrant development.
 arwp_wpconfig_owner: wordpress
 arwp_wpconfig_group: www-data
 arwp_wpconfig_mode: '0640'
@@ -133,6 +133,17 @@ arwp_wpconfig_mode: '0640'
 #===============================================================================
 # Blog Install
 #===============================================================================
+# A filename or glob pattern in the Wordpress directory that is created after
+# the framework has been downloaded. This pattern is checked by command module
+# to prevent to download twice.
+#
+# If set empty (""), download will happen if any file in the Wordpress directory
+# has changed, since the checksums are checked. Files will be overwritten
+# (--force switch), so use it with that in mind).
+arwp_blog_download_creates: >-
+  {{ arwp_install_path }}/{{ arwp_install_folder_name }}/wp-admin
+
+# Install parameters.
 arwp_blog_url: "{{ arwp_wpconfig_siteurl }}"
 arwp_blog_title: My Wordpress
 arwp_blog_admin_user: admin
