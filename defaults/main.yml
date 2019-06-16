@@ -132,3 +132,13 @@ arwp_wpconfig_nonce_salt: '^5M~jK,lte.TK&)W+Dn(SgX>S9<fm5a(5Y|YQ$?FTy8Ia]*SjT]K{
 arwp_wpconfig_owner: wordpress
 arwp_wpconfig_group: www-data
 arwp_wpconfig_mode: '0640'
+
+#===============================================================================
+# Blog Install
+#===============================================================================
+arwp_blog_url: "{{ arwp_wpconfig_siteurl }}"
+arwp_blog_title: My Wordpress
+arwp_blog_admin_user: admin
+arwp_blog_admin_pass: admin
+arwp_blog_admin_email: admin@example.com
+arwp_blog_skip_email: true

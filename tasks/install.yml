@@ -20,14 +20,31 @@
     group: "{{ arwp_wpconfig_group }}"
     mode: "{{ arwp_wpconfig_mode }}"
 
-- name: set fact wordpress installed to false
-  set_fact:
-    arwp_fact_wordpress_installed: false
+- name: verify checksums for wordpress files
+  command: wp --allow-root core verify-checksums
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  register: arwp_result_checksums
+  ignore_errors: yes
+  changed_when: false
+
+- debug: var=arwp_result_checksums
+  tags: [never, debug]
+
+- name: download wordpress
+  become: yes
+  become_user: "{{ arwp_user_name }}"
+  command: >-
+    wp core download --path="{{ arwp_fact_wordpress_path }}" {{ '--locale="'
+    + arwp_wordpress_locale + '"' if arwp_wordpress_locale else '' }} {{
+    '--version="' + arwp_wordpress_version + '"' if arwp_wordpress_version
+    is regex('^[0-9]\.[0-9]\.?[0-9]?$') else '' }}
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  when: arwp_result_checksums.rc != 0
 
 - name: check if wordpress is installed
   command: wp --allow-root core is-installed
-  args:
-    chdir: "{{ arwp_fact_wordpress_path }}"
   register: arwp_result_is_installed
   ignore_errors: yes
   changed_when: false
@@ -35,18 +52,21 @@
 - debug: var=arwp_result_is_installed
   tags: [never, debug]
 
-# I could use directly rc == 0 but this way with set_fact is more readable.
-- name: set fact wordpress installed to true
-  set_fact:
-    arwp_fact_wordpress_installed: true
-  when: arwp_result_is_installed.rc == 0
-
-- block:
-    - name: import download tasks
-      import_tasks: download.yml
-
-    # - name: install wordpress
-  when: arwp_fact_wordpress_installed == false
+- name: install wordpress
+  become: yes
+  become_user: "{{ arwp_user_name }}"
+  command: >-
+    wp --path={{ arwp_fact_wordpress_path }} core install
+    --url="{{ arwp_blog_url }}"
+    --title="{{ arwp_blog_title }}"
+    --admin_user="{{ arwp_blog_admin_user }}"
+    --admin_password="{{ arwp_blog_admin_pass }}"
+    --admin_email="{{ arwp_blog_admin_email }}"
+    {{ '--skip-email' if arwp_blog_skip_email else '' }}
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  no_log: true
+  when: arwp_result_is_installed.rc != 0
 
 # - name: get wordpress installed version
 #   command: wp --allow-root core version

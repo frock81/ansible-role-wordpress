@@ -8,9 +8,6 @@
   ignore_errors: yes
   changed_when: false
 
-- debug: var=arwp_result_wpcli_info0
-  tags: [never, debug]
-
 - block:
     - name: download wp-cli phar file
       get_url:
@@ -27,9 +24,6 @@
       command: "{{ __arwp_wpcli_phar_final_filename }} --info"
       register: arwp_result_wpcli_info1
       changed_when: false
-
-    - debug: var=arwp_result_wpcli_info1
-      tags: [never, debug]
 
     - name: assert correct execution of wp-cli
       assert:
