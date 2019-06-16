@@ -11,6 +11,9 @@ __arwp_user_shell: /bin/bash
 # Append group to user groups.
 __arwp_user_append: yes
 
+# Mode for the installation folder.
+__arwp_install_folder_mode: '0755'
+
 #-------------------------------------------------------------------------------
 # Wp-cli.
 #-------------------------------------------------------------------------------

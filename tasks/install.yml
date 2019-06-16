@@ -10,7 +10,7 @@
     state: directory
     owner: "{{ arwp_user_name }}"
     group: "{{ arwp_group_name }}"
-    mode: "{{ arwp_install_folder_mode }}"
+    mode: "{{ __arwp_install_folder_mode }}"
 
 - name: template wp-config.php
   template:

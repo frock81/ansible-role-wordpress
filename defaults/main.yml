@@ -8,9 +8,6 @@ arwp_install_path: /opt
 # Name of the Wordpress installation folder.
 arwp_install_folder_name: wordpress
 
-# Mode for the installation folder.
-arwp_install_folder_mode: '0750'
-
 # OS user for the wordpress files.
 arwp_group_name: wordpress
 
