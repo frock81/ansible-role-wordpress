@@ -5,7 +5,7 @@
     arwp_fact_plugin_is_enabled: false
 
 - name: check if {{ item.slug }} is enabled or not
-  command: wp --allow-root plugin is-active {{ item.slug }}"
+  command: wp --allow-root plugin is-active {{ item.slug }}
   args:
     chdir: "{{ arwp_fact_wordpress_path }}"
   ignore_errors: yes
