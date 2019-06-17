@@ -70,3 +70,17 @@
     chdir: "{{ arwp_fact_wordpress_path }}"
   no_log: true
   when: arwp_result_is_installed.rc != 0
+
+#-------------------------------------------------------------------------------
+# Wp-Content Permissions
+#-------------------------------------------------------------------------------
+# @see https://wordpress.org/support/article/hardening-wordpress/
+- name: adjust wp-content folder permissions
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ arwp_wpcontent_owner }}"
+    group: "{{ arwp_wpcontent_group }}"
+    mode: "{{ arwp_wpcontent_mode }}"
+    recurse: no
+  with_items: "{{ arwp_wpcontent_write_folders }}"

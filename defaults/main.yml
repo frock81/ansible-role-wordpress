@@ -154,3 +154,16 @@ arwp_blog_admin_user: admin
 arwp_blog_admin_pass: admin
 arwp_blog_admin_email: admin@example.com
 arwp_blog_skip_email: true
+
+#===============================================================================
+# Wp-content Permissions
+#===============================================================================
+arwp_wpcontent_path: >-
+  {{ arwp_install_path }}/{{ arwp_install_folder_name }}/wp-content
+arwp_wpcontent_owner: "{{ arwp_user_name }}"
+arwp_wpcontent_group: www-data
+arwp_wpcontent_mode: '0775'
+# Folders that the web server will be able to write to (previous permissions)
+arwp_wpcontent_write_folders:
+  - "{{ arwp_wpcontent_path }}"
+  - "{{ arwp_wpcontent_path }}/uploads"
