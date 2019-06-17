@@ -18,14 +18,14 @@
   ignore_errors: yes
   changed_when: false
 
-- name: import download tasks
-  import_tasks: download.yml
-  when: arwp_result_checksums.rc != 0
-
 - name: stat {{ arwp_blog_download_creates }}
   stat:
     path: "{{ arwp_blog_download_creates }}"
   register: arwp_result_blog_download_creates
+
+- name: import download tasks
+  import_tasks: download.yml
+  when: arwp_result_checksums.rc != 0
 
 - block:
     - name: get downloaded version

@@ -53,6 +53,10 @@ arwp_wpcli_version: ""
 #arwp_wordpress_version: "5.2.1"
 arwp_wordpress_version: ""
 
+# In the case of moving between versions, the old wp-content folder can be
+# syncronized with the new.
+arwp_wordpress_sync_wp_content: false
+
 # Wordpress locale to be downloaded.
 # Ex:
 #arwp_wordpress_locale: en_US

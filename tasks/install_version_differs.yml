@@ -1,11 +1,27 @@
 ---
-- name: move wordpress old installation
-  command:
-    "mv \"{{ arwp_fact_wordpress_path }}\" \"{{ arwp_install_path}}/\
-    {{ arwp_install_folder_name }}_{{ ansible_date_time.iso8601 }}\""
+- name: set fact date_time suffix
+  set_fact:
+    arwp_fact_date_time_suffix: "{{ ansible_date_time.iso8601 }}"
+
+- name: set fact wordpress old install path
+  set_fact:
+    arwp_fact_wordpress_old_install_path:
+      "{{ arwp_install_path}}/\
+      {{ arwp_install_folder_name }}_{{ arwp_fact_date_time_suffix }}"
+
+- name: move wordpress old installation to a new path
+  command: >-
+    mv "{{ arwp_fact_wordpress_path }}"
+    "{{ arwp_fact_wordpress_old_install_path }}"
 
 - name: import tasks related to install path and wp-config.php
   import_tasks: wp_config.yml
 
 - name: import download tasks
   import_tasks: download.yml
+
+- name: sync old wp-content with new path
+  command: >-
+    rsync -a --delete "{{ arwp_fact_wordpress_old_install_path }}/wp-content/"
+    "{{ arwp_fact_wordpress_path }}/wp-content/"
+  when: arwp_wordpress_sync_wp_content == true
