@@ -4,22 +4,12 @@
     arwp_fact_wordpress_path: >-
       {{ arwp_install_path }}/{{ arwp_install_folder_name }}
 
-- name: check install directory existence
-  file:
-    path: "{{ arwp_fact_wordpress_path }}"
-    state: directory
-    owner: "{{ arwp_user_name }}"
-    group: "{{ arwp_group_name }}"
-    mode: "{{ __arwp_install_folder_mode }}"
+- name: import tasks related to install path and wp-config.php
+  import_tasks: wp_config.yml
 
-- name: template wp-config.php
-  template:
-    src: wp-config.php.j2
-    dest: "{{ arwp_fact_wordpress_path }}/wp-config.php"
-    owner: "{{ arwp_wpconfig_owner }}"
-    group: "{{ arwp_wpconfig_group }}"
-    mode: "{{ arwp_wpconfig_mode }}"
-
+#-------------------------------------------------------------------------------
+# Download
+#-------------------------------------------------------------------------------
 - name: verify checksums for wordpress files
   command: wp --allow-root core verify-checksums
   args:
@@ -28,19 +18,35 @@
   ignore_errors: yes
   changed_when: false
 
-- name: download wordpress
-  become: yes
-  become_user: "{{ arwp_user_name }}"
-  command: >-
-    wp core download --path="{{ arwp_fact_wordpress_path }}" {{ '--locale="'
-    + arwp_wordpress_locale + '"' if arwp_wordpress_locale else '' }} {{
-    '--version="' + arwp_wordpress_version + '"' if arwp_wordpress_version
-    is regex('^[0-9]\.[0-9]\.?[0-9]?$') else '' }} --force
-  args:
-    chdir: "{{ arwp_fact_wordpress_path }}"
-    creates: "{{ arwp_blog_download_creates }}"
+- name: import download tasks
+  import_tasks: download.yml
   when: arwp_result_checksums.rc != 0
 
+- name: stat {{ arwp_blog_download_creates }}
+  stat:
+    path: "{{ arwp_blog_download_creates }}"
+  register: arwp_result_blog_download_creates
+
+- block:
+    - name: get downloaded version
+      command: wp --allow-root core version
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+      register: arwp_result_core_version
+      ignore_errors: yes
+      changed_when: false
+
+    - name: import tasks to be run when versions differs
+      import_tasks: install_version_differs.yml
+      when: >-
+        arwp_wordpress_version is version(arwp_result_core_version.stdout, '<>')
+  when: ( arwp_result_checksums.rc == 0
+    or arwp_result_blog_download_creates.stat.exists )
+    and arwp_wordpress_version is regex('^[0-9]\.[0-9]\.?[0-9]?$')
+
+#-------------------------------------------------------------------------------
+# Install
+#-------------------------------------------------------------------------------
 - name: check if wordpress is installed
   command: wp --allow-root core is-installed
   args:
@@ -64,10 +70,3 @@
     chdir: "{{ arwp_fact_wordpress_path }}"
   no_log: true
   when: arwp_result_is_installed.rc != 0
-
-# - name: get wordpress installed version
-#   command: wp --allow-root core version
-#   args:
-#     chdir: "{{ arwp_fact_wordpress_path }}"
-#   register: arwp_result_wordpress_version
-#   when: arwp_fact_wordpress_installed == true and arwp_wordpress_version != ""

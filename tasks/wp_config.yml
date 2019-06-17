@@ -1,0 +1,16 @@
+---
+- name: check install directory existence
+  file:
+    path: "{{ arwp_fact_wordpress_path }}"
+    state: directory
+    owner: "{{ arwp_user_name }}"
+    group: "{{ arwp_group_name }}"
+    mode: "{{ __arwp_install_folder_mode }}"
+
+- name: template wp-config.php
+  template:
+    src: wp-config.php.j2
+    dest: "{{ arwp_fact_wordpress_path }}/wp-config.php"
+    owner: "{{ arwp_wpconfig_owner }}"
+    group: "{{ arwp_wpconfig_group }}"
+    mode: "{{ arwp_wpconfig_mode }}"

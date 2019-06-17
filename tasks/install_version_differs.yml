@@ -1,0 +1,11 @@
+---
+- name: move wordpress old installation
+  command:
+    "mv \"{{ arwp_fact_wordpress_path }}\" \"{{ arwp_install_path}}/\
+    {{ arwp_install_folder_name }}_{{ ansible_date_time.iso8601 }}\""
+
+- name: import tasks related to install path and wp-config.php
+  import_tasks: wp_config.yml
+
+- name: import download tasks
+  import_tasks: download.yml

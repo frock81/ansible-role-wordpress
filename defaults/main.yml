@@ -50,7 +50,7 @@ arwp_wpcli_version: ""
 # When there is just one dot (ex: 5.0) use quotes so it won't be interpreted
 # as a float.
 # Ex:
-#arwp_wordpress_version: 5.2.2
+#arwp_wordpress_version: "5.2.1"
 arwp_wordpress_version: ""
 
 # Wordpress locale to be downloaded.
