@@ -1,0 +1,19 @@
+---
+- name: set_fact arwp_plugin_is_installed as false
+  set_fact:
+    arwp_plugin_is_installed: false
+
+- name: check if plugin {{ item.slug }} is installed
+  become: yes
+  become_user: "{{ arwp_user_name }}"
+  command: wp plugin is-installed {{ item.slug }}
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  ignore_errors: yes
+  changed_when: false
+  register: is_installed
+
+- name: set_fact arwp_plugin_is_installed as true
+  set_fact:
+    arwp_plugin_is_installed: true
+  when: is_installed.rc == 0

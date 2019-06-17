@@ -1,9 +1,4 @@
 ---
-- name: set fact wordpress path
-  set_fact:
-    arwp_fact_wordpress_path: >-
-      {{ arwp_install_path }}/{{ arwp_install_folder_name }}
-
 - name: import tasks related to install path and wp-config.php
   import_tasks: wp_config.yml
 

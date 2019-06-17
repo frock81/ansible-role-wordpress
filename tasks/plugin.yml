@@ -1,0 +1,18 @@
+---
+- name: include install check tasks for {{ item.slug }}
+  include_tasks: plugin_check_install.yml
+
+- name: include install tasks for {{ item.slug }}
+  include_tasks: plugin_install.yml
+  when: item.installed | default(true) == true
+
+- name: uninstall plugin {{ item.slug }}
+  command: wp plugin --allow-root uninstall {{ item.slug }} --deactivate
+  args:
+    chdir: "{{ wordpress_git_dest }}"
+  when: >-
+    item.installed | default(true) == false
+    and arwp_fact_plugin_is_installed == true
+
+- name: include activation/deactivation tasks for {{ item.slug }}
+  include_tasks: plugin_enablement.yml

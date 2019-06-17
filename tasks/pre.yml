@@ -1,10 +1,12 @@
 ---
-#-------------------------------------------------------------------------------
-# Pre-tasks
-#-------------------------------------------------------------------------------
 # For eventual previous apache/nginx/mysql installation
 - name: flush handlers
   meta: flush_handlers
+
+- name: set fact wordpress path
+  set_fact:
+    arwp_fact_wordpress_path: >-
+      {{ arwp_install_path }}/{{ arwp_install_folder_name }}
 
 - name: create group for wordpress
   group:

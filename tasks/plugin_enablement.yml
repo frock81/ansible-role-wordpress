@@ -1,0 +1,37 @@
+---
+- name: >-
+    set fact plugin arwp_fact_plugin_is_enabled as false for {{ item.slug }}
+  set_fact:
+    arwp_fact_plugin_is_enabled: false
+
+- name: check if {{ item.slug }} is enabled or not
+  command: wp --allow-root plugin is-active {{ item.slug }}"
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  ignore_errors: yes
+  changed_when: false
+  register: is_enabled
+
+- name: >-
+    set fact plugin arwp_fact_plugin_is_enabled as true for {{ item.slug }}
+  set_fact:
+    arwp_fact_plugin_is_enabled: true
+  when: is_enabled.rc == 0
+
+- block:
+    - name: activate plugin {{ item.slug }}
+      command: wp --allow-root plugin activate {{ item.slug }}
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+      when: >-
+        item.enabled | default(true) == true
+        and arwp_fact_plugin_is_enabled == false
+
+    - name: deactivate plugin {{ item.slug }}
+      command: wp --allow-root plugin deactivate {{ item.slug }}
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+      when: >-
+        item.enabled | default(true) == false
+        and arwp_fact_plugin_is_enabled == true
+  when: item.installed | default(true) == true

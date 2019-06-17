@@ -13,3 +13,6 @@
 - name: import wordpress install tasks
   import_tasks: install.yml
   tags: arwp_install
+
+- include_tasks: plugin.yml
+  with_items: "{{ arwp_plugins }}"

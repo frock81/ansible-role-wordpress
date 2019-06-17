@@ -1,0 +1,32 @@
+---
+- block:
+    - name: check installed version
+      command: wp plugin --allow-root get {{ item.slug }} --field=version
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+      register: arwp_result_version
+      changed_when: false
+
+    # Perhaps we should not uninstall but warn the user and asks for a variable
+    # To force uninstall (afraid of deleting files)
+    - name: uninstall {{ item.slug }}
+      command: wp plugin --allow-root uninstall {{ item.slug }} --deactivate
+      args:
+        chdir: "{{ arwp_fact_wordpress_path }}"
+      when: arwp_result_version.stdout is version(item.version, '<>')
+      register: arwp_result_uninstall
+
+    - name: set_fact arwp_fact_plugin_is_installed as false
+      set_fact:
+        arwp_fact_plugin_is_installed: false
+      when: arwp_result_uninstall.changed == true
+  when: arwp_fact_plugin_is_installed == true
+
+- name: install version {{ item.version }} of {{ item.slug }}
+  become: yes
+  become_user: "{{ arwp_user_name }}"
+  command: >-
+    wp plugin install {{item.slug }} --version={{ item.version }} --force
+  args:
+    chdir: "{{ arwp_fact_wordpress_path }}"
+  when: arwp_fact_plugin_is_installed == false

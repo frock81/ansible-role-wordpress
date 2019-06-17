@@ -167,3 +167,19 @@ arwp_wpcontent_mode: '0775'
 arwp_wpcontent_write_folders:
   - "{{ arwp_wpcontent_path }}"
   - "{{ arwp_wpcontent_path }}/uploads"
+
+#===============================================================================
+# Plugins
+#===============================================================================
+# Install and/or enable (activate) plugins. Default is to install and enable.
+# Example:
+#arwp_plugins:
+#  - slug: woocommerce
+#    version: 3.6.3
+#    installed: true
+#    enabled: true
+#  - slug: wp-mail-smtp
+#    version: 1.4.2
+#  - slug: hello
+#    installed: false
+arwp_plugins: []
