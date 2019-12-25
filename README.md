@@ -1,6 +1,6 @@
 # frock81.wordpress
 
-Yet another role to install Wordpress.
+Yet another role to install and configure Wordpress.
 
 ## Requirements
 
