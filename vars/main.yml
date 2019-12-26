@@ -27,6 +27,9 @@ __arwp_wpcli_build_repo_url: https://github.com/wp-cli/builds.git
 # Destination of build repo clone.
 __arwp_wpcli_build_repo_dest: /tmp/wp-cli
 
+# Wp-cli repository version.
+__arwp_wpcli_build_repo_version: HEAD
+
 # Full path to wp-cli.phar
 __arwp_wpcli_phar_path: "{{ __arwp_wpcli_build_repo_dest }}/phar/wp-cli.phar"
 

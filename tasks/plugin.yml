@@ -4,15 +4,15 @@
 
 - name: include install tasks for {{ item.slug }}
   include_tasks: plugin_install.yml
-  when: item.installed | default(true) == true
+  when: item.installed | default(true)
 
 - name: uninstall plugin {{ item.slug }}
   command: wp plugin --allow-root uninstall {{ item.slug }} --deactivate
   args:
     chdir: "{{ wordpress_git_dest }}"
-  when: >-
-    item.installed | default(true) == false
-    and arwp_fact_plugin_is_installed == true
+  when:
+    - not (item.installed | default(true))
+    - arwp_fact_plugin_is_installed
 
 - name: include activation/deactivation tasks for {{ item.slug }}
   include_tasks: plugin_enablement.yml

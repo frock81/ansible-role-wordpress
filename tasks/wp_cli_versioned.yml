@@ -17,7 +17,7 @@
   set_fact:
     arwp_wpcli_do_install: true
   when: >-
-    arwp_result_wpcli_version .stdout == ''
+    not (arwp_result_wpcli_version .stdout | default(''))
     or arwp_result_wpcli_version.stdout is version(arwp_wpcli_version, '<>')
 
 - block:
@@ -25,10 +25,11 @@
       git:
         repo: "{{ __arwp_wpcli_build_repo_url }}"
         dest: "{{ __arwp_wpcli_build_repo_dest }}"
+        version: "{{ __arwp_wpcli_build_repo_version }}"
 
     - name: get version {{ arwp_wpcli_version }} commit
       shell: >-
-        git log | grep -B4 "Update stable to v" 
+        git log | grep -B4 "Update stable to v"
         | grep -B4 v{{ arwp_wpcli_version }} | grep commit | cut -d' '  -f2
       args:
         chdir: "{{ __arwp_wpcli_build_repo_dest }}"
@@ -65,4 +66,4 @@
       file:
         path: "{{ __arwp_wpcli_build_repo_dest }}"
         state: absent
-  when: arwp_wpcli_do_install == true
+  when: arwp_wpcli_do_install

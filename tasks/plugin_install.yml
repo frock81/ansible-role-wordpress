@@ -19,16 +19,16 @@
     - name: set_fact arwp_fact_plugin_is_installed as false
       set_fact:
         arwp_fact_plugin_is_installed: false
-      when: arwp_result_uninstall.changed == true
-  when: arwp_fact_plugin_is_installed == true
+      when: arwp_result_uninstall.changed
+  when: arwp_fact_plugin_is_installed
 
 - name: install version {{ item.version }} of {{ item.slug }}
   become: yes
   become_user: "{{ arwp_user_name }}"
   command: >-
-    wp plugin install {{item.slug }}
+    wp plugin install {{ item.slug }}
     {{ '--version=' + item.version if item.version is defined else '' }}
     --force
   args:
     chdir: "{{ arwp_fact_wordpress_path }}"
-  when: arwp_fact_plugin_is_installed == false
+  when: not arwp_fact_plugin_is_installed

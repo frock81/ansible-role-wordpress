@@ -23,9 +23,9 @@
       command: wp --allow-root plugin activate {{ item.slug }}
       args:
         chdir: "{{ arwp_fact_wordpress_path }}"
-      when: >-
-        item.enabled | default(true) == true
-        and arwp_fact_plugin_is_enabled == false
+      when:
+        - item.enabled | default(true)
+        - not arwp_fact_plugin_is_enabled
 
     - name: deactivate plugin {{ item.slug }}
       command: wp --allow-root plugin deactivate {{ item.slug }}

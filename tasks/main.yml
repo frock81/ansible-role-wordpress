@@ -4,7 +4,7 @@
 
 - name: import wp-cli tasks
   import_tasks: wp_cli.yml
-  when: arwp_wpcli_version == ""
+  when: not (arwp_wpcli_version | default(''))
 
 - name: import wp-cli versioned tasks
   import_tasks: wp_cli_versioned.yml
