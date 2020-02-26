@@ -114,7 +114,7 @@ arwp_wpconfig_disallow_file_mods: false
 # Require SSL for Admin and Logins.
 arwp_wpconfig_force_ssl_admin: false
 
-# Forces the filesystem method.
+# Forces the filesystem method: direct, ssh, ftpext, ftpsockets.
 arwp_wpconfig_fs_method: ftpsockets
 
 #-------------------------------------------------------------------------------
