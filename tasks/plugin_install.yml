@@ -13,7 +13,9 @@
       command: wp plugin --allow-root uninstall {{ item.slug }} --deactivate
       args:
         chdir: "{{ arwp_fact_wordpress_path }}"
-      when: arwp_result_version.stdout is version(item.version, '<>')
+      when:
+        - item.version is defined
+        - arwp_result_version.stdout is version(item.version, '<>')
       register: arwp_result_uninstall
 
     - name: set_fact arwp_fact_plugin_is_installed as false
