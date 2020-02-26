@@ -167,6 +167,8 @@ arwp_wpcontent_mode: '0775'
 arwp_wpcontent_write_folders:
   - "{{ arwp_wpcontent_path }}"
   - "{{ arwp_wpcontent_path }}/uploads"
+  - "{{ arwp_wpcontent_path }}/themes"
+  - "{{ arwp_wpcontent_path }}/plugins"
 
 #===============================================================================
 # Plugins
