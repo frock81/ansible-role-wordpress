@@ -165,6 +165,7 @@ arwp_wpcontent_group: www-data
 arwp_wpcontent_mode: '0775'
 # Folders that the web server will be able to write to (previous permissions)
 arwp_wpcontent_write_folders:
+  - "{{ arwp_install_path }}/{{ arwp_install_folder_name }}"
   - "{{ arwp_wpcontent_path }}"
   - "{{ arwp_wpcontent_path }}/uploads"
   - "{{ arwp_wpcontent_path }}/themes"
