@@ -170,6 +170,8 @@ arwp_wpcontent_write_folders:
   - "{{ arwp_wpcontent_path }}/uploads"
   - "{{ arwp_wpcontent_path }}/themes"
   - "{{ arwp_wpcontent_path }}/plugins"
+  - "{{ arwp_wpcontent_path }}/languages/themes"
+  - "{{ arwp_wpcontent_path }}/languages/plugins"
 
 #===============================================================================
 # Plugins
