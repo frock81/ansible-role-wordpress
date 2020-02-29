@@ -81,6 +81,7 @@ $table_prefix  = '{{ arwp_wpconfig_table_prefix }}';
  * in their development environments.
  */
 define('WP_DEBUG', {{ 'true' if arwp_wpconfig_debug else 'false' }});
+define('WP_DEBUG_LOG', {{ 'true' if arwp_wpconfig_debug_log else 'false' }});
 /* That's all, stop editing! Happy blogging. */
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )

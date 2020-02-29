@@ -92,6 +92,7 @@ arwp_wpconfig_home: "{{ arwp_wpconfig_siteurl }}"
 arwp_wpconfig_language: en_US
 arwp_wpconfig_table_prefix: wp_
 arwp_wpconfig_debug: false
+arwp_wpconfig_debug_log: false
 
 #-------------------------------------------------------------------------------
 # Updates.
